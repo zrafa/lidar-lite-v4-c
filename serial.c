@@ -29,8 +29,8 @@ typedef struct
 uart_t *puerto_serial = (uart_t *) (0xc0);
 
 //#define USART_BAUDRATE 9600
-#define USART_BAUDRATE 57600
-#define BAUD_PRESCALE (((F_CPU/(USART_BAUDRATE*16UL)))-1) /* F_CPU viene como parametro en el Makefile */
+// #define USART_BAUDRATE 57600
+// #define BAUD_PRESCALE (((F_CPU/(USART_BAUDRATE*16UL)))-1) /* F_CPU viene como parametro en el Makefile */
 
 /* UCSRnC */
 
@@ -61,8 +61,12 @@ uart_t *puerto_serial = (uart_t *) (0xc0);
 #define READY_TO_WRITE 0x20  /* 0b 0010 0000 - bit 5 */
 
 
-void serial_init()
+void serial_init(uint16_t USART_BAUDRATE)
 {
+	uint16_t BAUD_PRESCALE;
+
+	BAUD_PRESCALE = (uint16_t) (((F_CPU/(USART_BAUDRATE*16UL)))-1); /* F_CPU from Makefile */
+
         /* Configurar los registros High y Low con BAUD_PRESCALE */
         puerto_serial->baud_rate_h = (unsigned char) (BAUD_PRESCALE>>8);
         puerto_serial->baud_rate_l = (unsigned char) (BAUD_PRESCALE);

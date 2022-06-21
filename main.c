@@ -1,7 +1,5 @@
 #include <stddef.h>
 #include <stdio.h>
-#include <util/delay.h>
-#include <avr/interrupt.h>
 
 #include "serial.h"
 #include "twi.h"
@@ -12,9 +10,9 @@ void main() {
 	char msg[80];
 	uint16_t distance;
 
-	serial_init();
-	twi_init();  //Inicializa la interfaz i2c
-	lidar_v4_init();  //Inicializa la interfaz i2c
+	serial_init(57600);
+	twi_init();		/* init i2c */
+	lidar_v4_init();	/* init lidar with some specific values (check code) */
 
 	while(1) {
 		
