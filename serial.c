@@ -61,11 +61,12 @@ uart_t *puerto_serial = (uart_t *) (0xc0);
 #define READY_TO_WRITE 0x20  /* 0b 0010 0000 - bit 5 */
 
 
-void serial_init(uint16_t USART_BAUDRATE)
+void serial_init(uint32_t USART_BAUDRATE)
 {
 	uint16_t BAUD_PRESCALE;
 
-	BAUD_PRESCALE = (uint16_t) (((F_CPU/(USART_BAUDRATE*16UL)))-1); /* F_CPU from Makefile */
+//	BAUD_PRESCALE = (uint16_t) (((F_CPU/(USART_BAUDRATE*16UL)))-1); /* F_CPU from Makefile */
+	BAUD_PRESCALE = (F_CPU/ 8 / USART_BAUDRATE -1) / 2; /* F_CPU from Makefile */
 
         /* Configurar los registros High y Low con BAUD_PRESCALE */
         puerto_serial->baud_rate_h = (unsigned char) (BAUD_PRESCALE>>8);
