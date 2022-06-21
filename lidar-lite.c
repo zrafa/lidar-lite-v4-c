@@ -75,9 +75,6 @@ int lidar_v4_init()
 {
 	uint8_t reset = 0x01;
 	uint8_t sensivity = 0x20;
-
-
-
 	uint8_t count = 0x6f;
 
 
@@ -121,39 +118,44 @@ int lidar_v4_init()
     twi_write(SLAVE, &buf[0], 2, NULL);
 
 	buf[0] = HIGH_ACCURACY_MODE;
-	buf[1] = 0x0A;
+	buf[1] = 0x14;
     //twi_write(SLAVE, &QUICK_TERMINATION, 1, NULL);
     //twi_write(SLAVE, &termination, 1, NULL);
     twi_write(SLAVE, &buf[0], 2, NULL);
 }
 
-void lidar_v4_temp()
+uint16_t lidar_v4_get_distance()
+{
+	uint16_t distancia_cm = 0;
+	uint8_t buf[2];
+
+	/* take range */
+	buf[0] = ACQ_COMMANDS;
+	buf[1] = 0x04;	/* solicita una medicion */
+	twi_write(SLAVE, &buf[0], 2, NULL);
+
+	/* wait while busy */
+	lidar_status = 1;
+	while ((lidar_status&0x01) != 0) {
+		twi_write(SLAVE, &STATUS, 1, NULL);
+		twi_read(SLAVE, 1, leer_status);
+		twi_wait();
+	}
+
+	/* get distance */
+	twi_write(SLAVE, &FULL_DELAY_LOW, 1, NULL);
+	twi_read(SLAVE, 2, leer_medicion);
+	twi_wait();
+
+	distancia_cm = (uint16_t) (*distance | *(distance+1) << 8);
+
+	return distancia_cm;
+}
+
+void temp()
 {
 	char a[10];
 
-/*
-	lidar_status=0;
-    twi_write(SLAVE, &BOARD_TEMPERATURE, 1, NULL);
-    twi_read(SLAVE, 1, leer_status);
-	twi_wait();
-
-	if (lidar_status!=0)
-		serial_put_str("BOARD TEMP ");
-
-	sprintf(a, "%i", lidar_status);
-	serial_put_str(a);
-
-	lidar_status=0;
-    twi_write(SLAVE, &SOC_TEMPERATURE, 1, NULL);
-    twi_read(SLAVE, 1, leer_status);
-	twi_wait();
-
-	if (lidar_status!=0)
-		serial_put_str("SOC TEMP ");
-
-	sprintf(a, "%i", lidar_status);
-	serial_put_str(a);
-*/
 	uint16_t distancia_cm = 0;
 	uint8_t d = 0x04;
 	uint8_t dire = 0x10;
@@ -295,19 +297,19 @@ uint8_t lidar_v4_get_busy_flag()
 
 
 
-uint16_t lidar_v4_get_distance()
-{
+//uint16_t lidar_v4_get_distance()
+//{
     // 1. Trigger a range measurement.
-    lidar_v4_take_range();
+ //   lidar_v4_take_range();
 
     // 2. Wait for busyFlag to indicate the device is idle.
     //waitForBusy();
-	lidar_v4_wait();
+//	lidar_v4_wait();
 
     // 3. Read new distance data from device registers
-	lidar_v4_distancia();
+//	lidar_v4_distancia();
 //    return lidar_v4_read_distance();
 
-}
+//}
 
 

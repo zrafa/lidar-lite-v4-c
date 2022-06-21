@@ -10,26 +10,16 @@
 void main() {
 
 	char msg[80];
-	uint16_t newDistance;
+	uint16_t distance;
 
 	serial_init();
 	twi_init();  //Inicializa la interfaz i2c
 	lidar_v4_init();  //Inicializa la interfaz i2c
 
-	sei();
-	serial_put_str("test de prueba\n");
-
 	while(1) {
-/*
-
-  		newDistance = lidar_v4_get_distance();
-		serial_put_char(0x30+newDistance);
-		serial_put_char('\n');
-		sprintf(msg, "distancia (cm): %i \n", newDistance);
+		
+		distance = lidar_v4_get_distance();
+		sprintf(msg, "distance (cm): %i", distance);
 		serial_put_str(msg);
-*/
-  		// _delay_ms(20);  //Don't hammer too hard on the I2C bus
-//  		newDistance = lidar_v4_get_distance();
-		lidar_v4_temp();
 	}
 }
