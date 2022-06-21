@@ -1,3 +1,9 @@
+/*
+ * lidar-lite.c : driver for garmin lidar lite v4
+ * 
+ * Rafael Ignacio Zurita (c) 2022 <rafa@fi.uncoma.edu.ar>
+ */
+
 #include <stddef.h>
 #include <stdio.h>
 #include <util/delay.h>

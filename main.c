@@ -1,3 +1,10 @@
+/*
+ * main.c: little example program for testing garmin lidar lite v4
+ * 
+ * Rafael Ignacio Zurita (c) 2022 <rafa@fi.uncoma.edu.ar>
+ */
+
+
 #include <stddef.h>
 #include <stdio.h>
 
